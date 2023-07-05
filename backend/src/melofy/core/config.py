@@ -19,6 +19,7 @@ class _Setting(BaseSettings):
     CORS_ALLOWED_ORIGINS: List[str] = [
         "https://abhinasregmi.com.np",
         "http://localhost:5500",
+        "http://localhost:8000"
     ]
 
     # google endpoints
@@ -31,7 +32,7 @@ class _Setting(BaseSettings):
     GOOGLE_USER_EMAIL_SCOPE_URL: str = "https://www.googleapis.com/auth/userinfo.email"
 
     #callbacks
-    GOOGLE_CALLBACK_URL: str = "http://localhost:8000/api/auth/google/callback"
+    GOOGLE_CALLBACK_URL: str = "http://localhost:8000/api/v1/auth/google/callback"
 
     #.env
     GOOGLE_OAUTH_CLIENT_SECRET: str
