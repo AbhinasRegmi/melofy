@@ -46,6 +46,8 @@ class _Setting(BaseSettings):
     GOOGLE_SMTP_LOGIN: EmailStr
     GOOGLE_SMTP_PASS: str
 
+    DATABASE_CONNECTION_URI: str
+
 @lru_cache
 def _setting() -> _Setting:
     return _Setting() #type:ignore
