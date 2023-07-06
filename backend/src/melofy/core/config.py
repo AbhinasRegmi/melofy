@@ -5,7 +5,7 @@ All project settings are configured here.
 from typing import List
 from functools import lru_cache
 
-from pydantic import BaseSettings
+from pydantic import BaseSettings, EmailStr
 
 
 class _Setting(BaseSettings):
@@ -22,6 +22,10 @@ class _Setting(BaseSettings):
         "http://localhost:8000"
     ]
 
+    #smtp
+    GOOGLE_SMTP_PORT: int = 465
+    GOOGLE_SMTP_HOST: str = "smtp.gmail.com"
+
     # google endpoints
     GOOGLE_OAUTH_ROOT_URL: str = "https://accounts.google.com/o/oauth2/v2/auth"
     GOOGLE_OAUTH_TOKEN_URL: str = "https://oauth2.googleapis.com/token"
@@ -37,6 +41,10 @@ class _Setting(BaseSettings):
     #.env
     GOOGLE_OAUTH_CLIENT_SECRET: str
     GOOGLE_OAUTH_CLIENT_ID: str
+
+    MELOFY_SMTP_LOGIN: EmailStr
+    GOOGLE_SMTP_LOGIN: EmailStr
+    GOOGLE_SMTP_PASS: str
 
 @lru_cache
 def _setting() -> _Setting:

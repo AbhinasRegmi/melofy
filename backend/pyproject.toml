@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "melofy"
 version = "1.0.0"
-description = "Sync your pc sound with external devices."
+description = "Your partner to unlimited music."
 authors = [
 	{name= "Abhinas Regmi", email="contact@abhinasregmi.com.np"}
 ]
@@ -17,4 +17,6 @@ dependencies = [
     "gunicorn",
     "httpx",
     "python-dotenv",
+    "jinja2",
+    "python-multipart",
 ]

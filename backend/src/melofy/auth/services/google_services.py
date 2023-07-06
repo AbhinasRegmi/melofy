@@ -4,6 +4,8 @@ from pydantic import ValidationError
 from melofy.core.config import settings
 from melofy.auth.schemas.google_response import GoogleTokenResponse
 from melofy.auth.services.exceptions import GoogleTokenResponseError
+from melofy.auth.services.exceptions import InvalidAccessOrIdTokenError
+from melofy.auth.schemas.google_response import GoogleUserDetailResponse
 
 class GoogleServices:
     @classmethod
@@ -63,5 +65,29 @@ class GoogleServices:
                 return GoogleTokenResponse(
                     **response_json
                 )
-        except ValidationError:
+        except (ValidationError, KeyError):
             raise GoogleTokenResponseError
+        
+
+    @classmethod
+    async def get_user_detail(cls, token: GoogleTokenResponse) -> GoogleUserDetailResponse:
+        """
+        Get the user email and profile from google using access_tokens and id_tokens
+        """
+        HEADERS = {"Accept": "application/json", "Authorization": f"Bearer {token.id_token}"}
+
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    url=settings.GOOGLE_OAUTH_USER_URL + token.access_token,
+                    headers=HEADERS
+                )
+
+                response_json  = response.json()
+
+                return GoogleUserDetailResponse(
+                    **response_json
+                )
+
+        except (ValidationError, KeyError):
+            raise InvalidAccessOrIdTokenError
