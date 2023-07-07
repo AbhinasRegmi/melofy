@@ -1,8 +1,15 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter
+from fastapi import Query, Depends
+from sqlalchemy.orm import Session
+from fastapi import BackgroundTasks
 from fastapi.responses import RedirectResponse
 
+from melofy.deps.database import get_db
+from melofy.db.services.user_services import UserServices
+from melofy.db.schemas.user_schema import UserCreateSchema
+from melofy.mail.schemas.template_schema import HTMLTemplate
+from melofy.mail.services.email_services import EmailService
 from melofy.auth.services.google_services import GoogleServices
-
 
 google_handler = APIRouter(
     prefix='/google'
@@ -20,7 +27,25 @@ async def get_login_form():
 
 
 @google_handler.get("/callback")
-async def google_callback(code: str = Query(...)):
+async def google_callback(background: BackgroundTasks, db: Session = Depends(get_db), code: str = Query(...)):
+    """
+    Get user email and add to db if not already.
+    """
     response = await GoogleServices.get_google_token(code)
+    user_detail = await GoogleServices.get_user_detail(response)
+
+    if not (user:=UserServices.get_user_by_email(db, user_detail.email)):
+        user_in = UserCreateSchema(
+            email=user_detail.email,
+            avatar=user_detail.avatar,
+            is_verified=user_detail.verified
+        )
+
+        user = UserServices.create_user(db, user_in)
+        background.add_task(
+            EmailService.send_mail_to_client,
+            send_to=user_detail.email,
+            template=HTMLTemplate.WELCOME,
+            context={})
     
-    return response
+    return user

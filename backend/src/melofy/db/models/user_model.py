@@ -1,5 +1,6 @@
 from typing import List
 from typing import Optional
+from datetime import datetime
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -18,13 +19,29 @@ class User(Base):
     avatar: Mapped[str]
 
     is_verified: Mapped[bool] = mapped_column(default=True)
-    published: Mapped[Optional[List["MusicMetaData"]]] = relationship(    #type:ignore
-        back_populates="created_by",
-        cascade="all, delete-orphan"
-    )
+    # published: Mapped[Optional[List["MusicMetaData"]]] = relationship(
+    #     back_populates="created_by",
+    #     cascade="all, delete-orphan"
+    # )
 
     def __repr__(self) -> str:
         return f"User(email={self.email}, avatar={self.avatar})"
+
+
+class MusicMetaData(Base):
+    __tablename__ = "music_metadata"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str]
+    cover_url: Mapped[str]
+    created_at: Mapped[datetime] = mapped_column(default=datetime.now())
+
+    # created_by: Mapped["User"] = relationship(
+    #     back_populates="published"
+    # )
+
+    def __repr__(self) -> str:
+        return f"MusicMetaData(title={self.title}, created_at={self.created_at})"
 
 
 

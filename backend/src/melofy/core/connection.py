@@ -12,7 +12,3 @@ engine = create_engine(
         "check_same_thread": False
     }
 )
-
-def get_session() -> Generator[Session, None, None]:
-    with Session(bind=engine, autocommit=False, autoflush=False) as session:
-        yield session

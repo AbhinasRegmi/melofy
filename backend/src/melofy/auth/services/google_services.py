@@ -84,9 +84,11 @@ class GoogleServices:
                 )
 
                 response_json  = response.json()
-
+                print(response_json)
                 return GoogleUserDetailResponse(
-                    **response_json
+                    email=response_json['email'],
+                    avatar=response_json['picture'],
+                    verified=response_json['verified_email']
                 )
 
         except (ValidationError, KeyError):
