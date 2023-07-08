@@ -84,7 +84,7 @@ class GoogleServices:
                 )
 
                 response_json  = response.json()
-                print(response_json)
+
                 return GoogleUserDetailResponse(
                     email=response_json['email'],
                     avatar=response_json['picture'],

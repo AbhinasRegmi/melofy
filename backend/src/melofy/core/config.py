@@ -22,6 +22,11 @@ class _Setting(BaseSettings):
         "http://localhost:8000"
     ]
 
+    #jwt
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXP: int = 15 # 15 minutes
+    JWT_REFRESH_TOKEN_EXP: int = 7 * 24 * 60 # 7 days
+
     #smtp
     GOOGLE_SMTP_PORT: int = 465
     GOOGLE_SMTP_HOST: str = "smtp.gmail.com"
@@ -47,6 +52,9 @@ class _Setting(BaseSettings):
     GOOGLE_SMTP_PASS: str
 
     DATABASE_CONNECTION_URI: str
+
+    JWT_ACCESS_SECRET_KEY: str
+    JWT_REFRESH_SECRET_KEY: str
 
 @lru_cache
 def _setting() -> _Setting:

@@ -5,6 +5,8 @@ from fastapi import BackgroundTasks
 from fastapi.responses import RedirectResponse
 
 from melofy.deps.database import get_db
+from melofy.core.auth_tokens import get_auth_tokens
+from melofy.schemas.token_schema import JWTTokenData
 from melofy.db.services.user_services import UserServices
 from melofy.db.schemas.user_schema import UserCreateSchema
 from melofy.mail.schemas.template_schema import HTMLTemplate
@@ -41,11 +43,15 @@ async def google_callback(background: BackgroundTasks, db: Session = Depends(get
             is_verified=user_detail.verified
         )
 
-        user = UserServices.create_user(db, user_in)
+        UserServices.create_user(db, user_in)
         background.add_task(
             EmailService.send_mail_to_client,
             send_to=user_detail.email,
             template=HTMLTemplate.WELCOME,
             context={})
     
-    return user
+    auth_token = get_auth_tokens(
+        data=JWTTokenData(sub=user_detail.email)
+    )
+
+    return auth_token
