@@ -11,3 +11,10 @@ class UserCreateSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UserResponseInsideMusic(BaseModel):
+    email: EmailStr
+    avatar: str
+
+    class Config:
+        orm_mode = True

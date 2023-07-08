@@ -1,6 +1,8 @@
 from melofy.schemas.token_schema import Token, JWTTokenData
+
 from melofy.utils.tokens import validate_access_token, validate_refresh_token
 from melofy.utils.tokens import generate_jwt_access_token, generate_jwt_refresh_token
+
 
 def get_auth_tokens(data: JWTTokenData) -> Token:
     access_token = generate_jwt_access_token(data)

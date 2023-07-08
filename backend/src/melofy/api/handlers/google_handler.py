@@ -1,17 +1,21 @@
 from fastapi import APIRouter
 from fastapi import Query, Depends
-from sqlalchemy.orm import Session
 from fastapi import BackgroundTasks
 from fastapi.responses import RedirectResponse
 
+from sqlalchemy.orm import Session
+
 from melofy.deps.database import get_db
 from melofy.core.auth_tokens import get_auth_tokens
+
 from melofy.schemas.token_schema import JWTTokenData
-from melofy.services.user_services import UserServices
 from melofy.schemas.user_schema import UserCreateSchema
 from melofy.schemas.template_schema import HTMLTemplate
+
+from melofy.services.user_services import UserServices
 from melofy.services.email_services import EmailService
 from melofy.services.google_services import GoogleServices
+
 
 google_handler = APIRouter(
     prefix='/google'

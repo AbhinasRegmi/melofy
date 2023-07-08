@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape, Template #type:ignore
+from jinja2 import Environment, FileSystemLoader, select_autoescape, Template
 
 fileloader = FileSystemLoader("src/templates")
 gtemplates = Environment(loader=fileloader, autoescape=select_autoescape())

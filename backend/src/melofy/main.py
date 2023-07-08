@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from melofy.core.config import settings
 from melofy.api.auth_router import auth_router
+from melofy.api.user_router import user_router
 from melofy.api.upload_router import upload_router
 
 app = FastAPI(
@@ -21,3 +22,4 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(upload_router)
+app.include_router(user_router)
