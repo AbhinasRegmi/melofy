@@ -2,10 +2,10 @@ import httpx
 from pydantic import ValidationError
 
 from melofy.core.config import settings
-from melofy.auth.schemas.google_response import GoogleTokenResponse
-from melofy.auth.services.exceptions import GoogleTokenResponseError
-from melofy.auth.services.exceptions import InvalidAccessOrIdTokenError
-from melofy.auth.schemas.google_response import GoogleUserDetailResponse
+from melofy.schemas.google_response import GoogleTokenResponse
+from melofy.services.exceptions import GoogleTokenResponseError
+from melofy.services.exceptions import InvalidAccessOrIdTokenError
+from melofy.schemas.google_response import GoogleUserDetailResponse
 
 class GoogleServices:
     @classmethod

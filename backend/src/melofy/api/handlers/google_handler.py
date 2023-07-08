@@ -7,11 +7,11 @@ from fastapi.responses import RedirectResponse
 from melofy.deps.database import get_db
 from melofy.core.auth_tokens import get_auth_tokens
 from melofy.schemas.token_schema import JWTTokenData
-from melofy.db.services.user_services import UserServices
-from melofy.db.schemas.user_schema import UserCreateSchema
-from melofy.mail.schemas.template_schema import HTMLTemplate
-from melofy.mail.services.email_services import EmailService
-from melofy.auth.services.google_services import GoogleServices
+from melofy.services.user_services import UserServices
+from melofy.schemas.user_schema import UserCreateSchema
+from melofy.schemas.template_schema import HTMLTemplate
+from melofy.services.email_services import EmailService
+from melofy.services.google_services import GoogleServices
 
 google_handler = APIRouter(
     prefix='/google'

@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from melofy.core.config import settings
-from melofy.auth.auth_router import auth_router
-from melofy.upload.upload_router import upload_router
+from melofy.api.auth_router import auth_router
+from melofy.api.upload_router import upload_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

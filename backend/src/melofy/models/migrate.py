@@ -1,4 +1,4 @@
-from melofy.db.models.user_model import create_all_user, remove_all_user
+from melofy.models.user_model import create_all_user, remove_all_user
 
 
 def apply_all() -> None:

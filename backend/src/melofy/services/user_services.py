@@ -3,8 +3,8 @@ from typing import Optional
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
-from melofy.db.models.user_model import User
-from melofy.db.schemas.user_schema import UserCreateSchema
+from melofy.models.user_model import User
+from melofy.schemas.user_schema import UserCreateSchema
 
 class UserServices:
     @classmethod

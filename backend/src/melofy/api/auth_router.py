@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from melofy.auth.api.google_handler import google_handler
-from melofy.auth.api.token_handler import token_handler
+from melofy.api.handlers.google_handler import google_handler
+from melofy.api.handlers.token_handler import token_handler
 
 
 auth_router = APIRouter(

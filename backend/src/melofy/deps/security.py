@@ -5,10 +5,10 @@ from fastapi import Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from melofy.deps.database import get_db
-from melofy.db.models.user_model import User
+from melofy.models.user_model import User
 from melofy.schemas.token_schema import JWTTokenData
 from melofy.core.auth_tokens import validate_auth_tokens
-from melofy.db.services.user_services import UserServices
+from melofy.services.user_services import UserServices
 from melofy.deps.exceptions import UserNotFoundError, NotAuthenticatedError
 
 

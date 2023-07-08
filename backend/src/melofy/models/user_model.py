@@ -4,10 +4,9 @@ from datetime import datetime
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
 
 
-from melofy.db.models.base_model import Base
+from melofy.models.base_model import Base
 from melofy.core.connection import engine
 
 
