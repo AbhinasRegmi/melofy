@@ -21,7 +21,7 @@ google_handler = APIRouter(
 @google_handler.get("/login", response_class=RedirectResponse)
 async def get_login_form():
     """
-    Get the google login form or consent form.
+    Get the google login form or consent form and get your tokens.
     """
     return RedirectResponse(
         url=GoogleServices.get_google_consent_form()
@@ -31,7 +31,8 @@ async def get_login_form():
 @google_handler.get("/callback")
 async def google_callback(background: BackgroundTasks, db: Session = Depends(get_db), code: str = Query(...)):
     """
-    Get user email and add to db if not already.
+    Do not call this end-point directly. You should be redirected here automatically with
+    appropriate headers.
     """
     response = await GoogleServices.get_google_token(code)
     user_detail = await GoogleServices.get_user_detail(response)

@@ -12,18 +12,18 @@ def get_auth_tokens(data: JWTTokenData) -> Token:
         token_type="Bearer"
     )
 
-def validate_auth_tokens(token: Token) -> JWTTokenData:
+def validate_auth_tokens(token: str) -> JWTTokenData:
     # we will only validate access_token and send data
-    return validate_access_token(access_token=token.access_token)
+    return validate_access_token(access_token=token)
 
-def exchange_auth_tokens(token: Token) -> Token:
+def exchange_auth_tokens(token: str) -> Token:
     # we will verify refresh_token and provide new access_token
     # when refresh_token expires need to login again
-    data = validate_refresh_token(refresh_token=token.refresh_token)
+    data = validate_refresh_token(refresh_token=token)
     access_token = generate_jwt_access_token(data=data)
     
     return Token(
         access_token=access_token,
-        refresh_token=token.refresh_token,
+        refresh_token=token,
         token_type="Bearer"
     )
