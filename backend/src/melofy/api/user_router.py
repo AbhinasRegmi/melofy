@@ -3,7 +3,8 @@ from fastapi import APIRouter
 from melofy.api.handlers.user_handler import user_handler
 
 user_router = APIRouter(
-    tags=["users"]
+    prefix="/user",
+    tags=["user"]
 )
 
-user_handler.include_router(user_handler)
+user_router.include_router(user_handler)

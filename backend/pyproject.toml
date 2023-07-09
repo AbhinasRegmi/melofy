@@ -21,4 +21,5 @@ dependencies = [
     "python-multipart",
     "SQLAlchemy",
     "python-jose[cryptography]",
+    "pydantic-settings",
 ]

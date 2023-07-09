@@ -5,13 +5,15 @@ All project settings are configured here.
 from typing import List
 from functools import lru_cache
 
-from pydantic import BaseSettings, EmailStr
-
+from pydantic import EmailStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class _Setting(BaseSettings):
-    class Config:
-        env_file: str = ".env"
-        case_sensitive: bool = True
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True
+    )
 
     PROJECT_NAME: str = "melofy"
     PROJECT_VERSION: str = "1.0.0"

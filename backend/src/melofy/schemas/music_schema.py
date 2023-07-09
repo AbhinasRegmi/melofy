@@ -1,7 +1,8 @@
 from typing import Optional
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import Field
+from pydantic import BaseModel, ConfigDict
 
 from melofy.schemas.user_schema import UserResponseInsideMusic
 
@@ -16,5 +17,6 @@ class MusicResponseSchema(MusicUploadSchema):
     created_at: datetime = Field(default=datetime.now())
     published_by: UserResponseInsideMusic
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+
+    
