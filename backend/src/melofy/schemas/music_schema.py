@@ -9,11 +9,11 @@ from melofy.schemas.user_schema import UserResponseInsideMusic
 
 class MusicUploadSchema(BaseModel):
     title: str
-    cover_url: str
 
 class MusicResponseSchema(MusicUploadSchema):
     id: Optional[int]
 
+    cover_url: str
     created_at: datetime = Field(default=datetime.now())
     published_by: UserResponseInsideMusic
 

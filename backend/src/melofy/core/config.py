@@ -24,6 +24,10 @@ class _Setting(BaseSettings):
         "http://localhost:8000"
     ]
 
+    #uploads
+    MELOFY_COVER_UPLOAD_MAXSIZE: int = 5 * 1024 * 1024 # 5MB
+    MELOFY_AUDIO_UPLOAD_MAXSIZE: int = 20 * 1024 * 1024 # 20MB
+
     #jwt
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXP: int = 15 # 15 minutes
