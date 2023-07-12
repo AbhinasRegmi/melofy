@@ -7,12 +7,10 @@ from pydantic import BaseModel, ConfigDict
 from melofy.schemas.user_schema import UserResponseInsideMusic
 
 
-class MusicUploadSchema(BaseModel):
-    title: str
-
-class MusicResponseSchema(MusicUploadSchema):
+class MusicResponseSchema(BaseModel):
     id: Optional[int]
 
+    title: str
     cover_url: str
     created_at: datetime = Field(default=datetime.now())
     published_by: UserResponseInsideMusic

@@ -1,42 +1,29 @@
 from enum import Enum
-from typing import Any
-from itertools import chain
 
 from fastapi import UploadFile
-from starlette.datastructures import UploadFile as UP
 
+from melofy.schemas.exceptions import InvalidImageFormat, InvalidAudioFormat
 
-class UploadImageType(str, Enum):
+class ImageType(str, Enum):
     jpeg = "image/jpeg"
     png = "image/png"
     bmp = "image/bmp"
 
-class UploadAudioType(str, Enum):
+class AudioType(str, Enum):
     mp3 = "audio/mpeg"
     mp4 = "audio/mp4"
 
 
-# ALL_UPLOAD_TYPES = [a.value for a in chain(UploadImageType, UploadAudioType)]
-AVAILABLE_IMAGE_TYPES = [a.value for a in UploadImageType]
-AVAILABLE_AUDIO_TYPES = [a.value for a in UploadAudioType]
+# ALL_UPLOAD_TYPES = [a.value for a in chain(ImageType, AudioType)]
+AVAILABLE_IMAGE_TYPES = [a.value for a in ImageType]
+AVAILABLE_AUDIO_TYPES = [a.value for a in AudioType]
 
-class UploadFileImage(UploadFile):
+class UploadTypeValidation:
     @classmethod
-    def validate(cls, v: Any) -> Any:
-        res: UP = cls.validate(v)
-
-        if not res.content_type in AVAILABLE_IMAGE_TYPES:
-            raise ValueError(f"{res.content_type} is not supported for image.")
-        
-        return res
-
-class UploadFileAudio(UploadFile):
-    @classmethod
-    def validate(cls, v: Any) -> Any:
-        res: UP = cls.validate(v)
-
-        if not res.content_type in AVAILABLE_AUDIO_TYPES:
-            raise ValueError(f"{res.content_type} is not supported in audio.")
-        
-        return res
-    
+    def validate_type(cls, file: UploadFile, image: bool = True) -> None:
+        if image:
+            if file.content_type not in AVAILABLE_IMAGE_TYPES:
+                raise InvalidImageFormat(file.content_type)
+        else:
+            if file.content_type not in AVAILABLE_AUDIO_TYPES:
+                raise InvalidAudioFormat(file.content_type)
