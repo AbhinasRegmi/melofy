@@ -22,4 +22,5 @@ dependencies = [
     "SQLAlchemy",
     "python-jose[cryptography]",
     "pydantic-settings",
+    "cloudinary",
 ]

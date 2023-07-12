@@ -28,6 +28,9 @@ class _Setting(BaseSettings):
     MELOFY_COVER_UPLOAD_MAXSIZE: int = 5 * 1024 * 1024 # 5MB
     MELOFY_AUDIO_UPLOAD_MAXSIZE: int = 20 * 1024 * 1024 # 20MB
 
+    #cloudinary
+    CLOUDINARY_DEFAULT_UPLOAD_TAG: str = "music_covers"
+
     #jwt
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXP: int = 15 # 15 minutes
@@ -61,6 +64,10 @@ class _Setting(BaseSettings):
 
     JWT_ACCESS_SECRET_KEY: str
     JWT_REFRESH_SECRET_KEY: str
+
+    CLOUDINARY_CLOUD_NAME: str
+    CLOUDINARY_API_KEY: str
+    CLOUDINARY_API_SECRET: str
 
 @lru_cache
 def _setting() -> _Setting:

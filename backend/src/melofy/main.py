@@ -5,6 +5,8 @@ from melofy.core.config import settings
 from melofy.api.auth_router import auth_router
 from melofy.api.user_router import user_router
 from melofy.api.music_router import music_router
+from melofy.core.connection import GLOBAL_CLOUDINARY_CONFIG
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
