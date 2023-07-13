@@ -26,8 +26,12 @@ def upload(
     UploadTypeValidation.validate_type(music, image=False)
 
     #validate file_size
-    cover_file = validate_img_size(cover)
-    url, tag = CloudinaryServices.upload_image(cover_file)
+    with validate_img_size(cover) as cover_file:
+        url, tag = CloudinaryServices.upload_image(cover_file)
+
+    with validate_audio_size(music) as music_file:
+        pass
+
 
     return {
         "url": url,

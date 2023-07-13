@@ -1,6 +1,5 @@
-from typing import NamedTuple, IO
+from typing import NamedTuple
 
 
 class TemporaryFileType(NamedTuple):
     name: str
-    file: IO

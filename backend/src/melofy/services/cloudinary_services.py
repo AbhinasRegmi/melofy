@@ -17,14 +17,12 @@ class CloudinaryServices:
         """
     
         tag=str(uuid4())
-        response = upload_image(image.file.name, tags=tag)
+        response = upload_image(image.name, tags=tag)
         url, _ = cloudinary_url(
             response.public_id,
             format=response.format
         )
 
-        #finally deleting the temporary file.
-        os.unlink(image.file.name)
 
         return HttpUrl(url), tag
     

@@ -1,3 +1,5 @@
+from typing import Generator
+from contextlib import contextmanager
 from tempfile import NamedTemporaryFile
 
 from fastapi import UploadFile
@@ -7,35 +9,34 @@ from melofy.utils.schemas import TemporaryFileType
 from melofy.utils.exceptions import UploadMaxSizeExceedError
 
 
-
-def validate_img_size(file: UploadFile):
-    """
-    Don't forget to close the tempfile after use.
-    """
+@contextmanager
+def validate_img_size(file: UploadFile) -> Generator[TemporaryFileType, None, None]:
     real_file_size = 0
-    temp = NamedTemporaryFile(delete=False)
-    
 
-    for chunk in file.file:
-        real_file_size += len(chunk)
-        if real_file_size > settings.MELOFY_COVER_UPLOAD_MAXSIZE:
-            raise UploadMaxSizeExceedError
-        temp.write(chunk)
-    
-    temp.close()
-    return TemporaryFileType(name=temp.name, file=temp.file)
+    with NamedTemporaryFile(delete=False) as tmp:
+        for chunk in file.file:
+            real_file_size += len(chunk)
+            if real_file_size > settings.MELOFY_COVER_UPLOAD_MAXSIZE:
+                raise UploadMaxSizeExceedError
+            tmp.write(chunk)
 
+        tmp.close()
 
-def validate_audio_size(file: UploadFile) -> TemporaryFileType:
+        yield TemporaryFileType(name=tmp.name)
+
+@contextmanager
+def validate_audio_size(file: UploadFile) -> Generator[TemporaryFileType, None, None]:
     real_file_size = 0
-    temp = NamedTemporaryFile(delete=False)
 
-    for chunk in file.file:
-        real_file_size += len(chunk)
-        if real_file_size > settings.MELOFY_AUDIO_UPLOAD_MAXSIZE:
-            raise UploadMaxSizeExceedError
-        temp.write(chunk)
+    with NamedTemporaryFile(delete=False) as tmp:
+        for chunk in file.file:
+            real_file_size += len(chunk)
+            if real_file_size > settings.MELOFY_AUDIO_UPLOAD_MAXSIZE:
+                raise UploadMaxSizeExceedError
+            tmp.write(chunk)
 
-    return TemporaryFileType(name=temp.name, file=temp.file)
+        tmp.close()
+
+        yield TemporaryFileType(name=tmp.name)
         
         
