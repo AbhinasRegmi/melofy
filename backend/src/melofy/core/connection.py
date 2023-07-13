@@ -1,8 +1,8 @@
 from functools import lru_cache
 
 import cloudinary
+from pymongo import MongoClient
 from sqlalchemy import create_engine
-from motor.motor_asyncio import AsyncIOMotorClient
 
 
 from melofy.core.config import settings
@@ -16,11 +16,11 @@ engine = create_engine(
 
 @lru_cache(maxsize=1)
 def _get_mongodb():
-    db = AsyncIOMotorClient(settings.MONGODB_CONNECTION_URI).melofy
+    db = MongoClient(settings.MONGODB_CONNECTION_URI).melofy
     return db
 
 
-mongodb = _get_mongodb()
+mongodb_client = _get_mongodb()
 
 #global settings required for cloudinary
 #import this in main.py

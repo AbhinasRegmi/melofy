@@ -3,8 +3,6 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from melofy.deps.database import MongoDb
-
 from melofy.core.config import settings
 from melofy.core.connection import GLOBAL_CLOUDINARY_CONFIG
 
@@ -15,7 +13,6 @@ from melofy.api.music_router import music_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    MongoDb.get_connection()
     yield
 
 app = FastAPI(

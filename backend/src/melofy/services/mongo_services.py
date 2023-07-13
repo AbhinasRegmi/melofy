@@ -1,22 +1,20 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Any
 
+from gridfs import GridFS
 from melofy.utils.schemas import TemporaryFileType
 
 
 class MongoServices:
     @classmethod
-    async def upload_music(cls, mdb, file: TemporaryFileType, file_hash: str) -> None:
-        grid_in = mdb.open_upload_stream(
-            hash,
-            metadata={'ContentType': file.content_type}
-        )
-
+    def upload_music(cls, mdb: GridFS, file: TemporaryFileType, file_hash: str) -> Any:
         with open(file.name) as fp:
-            data = fp.read()
+            oid = mdb.put(
+                fp,
+                content_type=file.content_type,
+                filename=file_hash
+            )
 
-        await grid_in.write(data)
-        await grid_in.close()
-
+            return oid
     @classmethod
     async def stream_music(cls, file_hash: str) -> AsyncGenerator[bytes, None]:
         ...

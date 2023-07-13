@@ -1,7 +1,7 @@
 from fastapi import Depends, BackgroundTasks
 from fastapi import APIRouter, UploadFile, File, Form
 
-from melofy.deps.database import get_db, MongoDb
+from melofy.deps.database import get_db, get_mdb
 from melofy.deps.security import get_current_user
 
 from melofy.schemas.upload_schema import UploadTypeValidation
@@ -20,7 +20,7 @@ music_handler = APIRouter()
 async def upload(
     background: BackgroundTasks,
     db=Depends(get_db),
-    mdb=Depends(MongoDb),
+    mdb=Depends(get_mdb),
     user=Depends(get_current_user),
     title: str = Form(...),
     cover: UploadFile = File(...),
@@ -37,9 +37,9 @@ async def upload(
 
     with validate_audio_size(music) as music_file:
         music_hash = generate_random_hash()
-        await MongoServices.upload_music(mdb, music_file, music_hash)
+        oid = MongoServices.upload_music(mdb, music_file, music_hash)
 
     return {
-        "url": '',
+        "url": oid,
         "tag": ''
     }

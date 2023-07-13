@@ -23,5 +23,5 @@ dependencies = [
     "python-jose[cryptography]",
     "pydantic-settings",
     "cloudinary",
-    "pymongo",
+    "pymongo"
 ]
