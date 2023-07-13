@@ -60,7 +60,8 @@ class _Setting(BaseSettings):
     GOOGLE_SMTP_LOGIN: EmailStr
     GOOGLE_SMTP_PASS: str
 
-    DATABASE_CONNECTION_URI: str
+    POSTGRES_CONNECTION_URI: str
+    MONGODB_CONNECTION_URI: str
 
     JWT_ACCESS_SECRET_KEY: str
     JWT_REFRESH_SECRET_KEY: str

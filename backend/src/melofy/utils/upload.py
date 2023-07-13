@@ -22,7 +22,7 @@ def validate_img_size(file: UploadFile) -> Generator[TemporaryFileType, None, No
 
         tmp.close()
 
-        yield TemporaryFileType(name=tmp.name)
+        yield TemporaryFileType(name=tmp.name, content_type=file.content_type) #type:ignore we are sure there will be content type
 
 @contextmanager
 def validate_audio_size(file: UploadFile) -> Generator[TemporaryFileType, None, None]:
@@ -37,6 +37,6 @@ def validate_audio_size(file: UploadFile) -> Generator[TemporaryFileType, None, 
 
         tmp.close()
 
-        yield TemporaryFileType(name=tmp.name)
+        yield TemporaryFileType(name=tmp.name, content_type=file.content_type) #type:ignore
         
         

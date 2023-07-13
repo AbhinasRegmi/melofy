@@ -1,12 +1,15 @@
-from fastapi import Depends
+from fastapi import Depends, BackgroundTasks
 from fastapi import APIRouter, UploadFile, File, Form
 
-from melofy.deps.database import get_db
+from melofy.deps.database import get_db, MongoDb
 from melofy.deps.security import get_current_user
 
 from melofy.schemas.upload_schema import UploadTypeValidation
+
+from melofy.services.mongo_services import MongoServices
 from melofy.services.cloudinary_services import CloudinaryServices
 
+from melofy.utils.hash import generate_random_hash
 from melofy.utils.upload import validate_img_size, validate_audio_size
 
 
@@ -14,8 +17,10 @@ music_handler = APIRouter()
 
 #testing route
 @music_handler.post("/music")
-def upload(
+async def upload(
+    background: BackgroundTasks,
     db=Depends(get_db),
+    mdb=Depends(MongoDb),
     user=Depends(get_current_user),
     title: str = Form(...),
     cover: UploadFile = File(...),
@@ -27,13 +32,14 @@ def upload(
 
     #validate file_size
     with validate_img_size(cover) as cover_file:
-        url, tag = CloudinaryServices.upload_image(cover_file)
-
-    with validate_audio_size(music) as music_file:
+        # url, tag = CloudinaryServices.upload_image(cover_file)
         pass
 
+    with validate_audio_size(music) as music_file:
+        music_hash = generate_random_hash()
+        await MongoServices.upload_music(mdb, music_file, music_hash)
 
     return {
-        "url": url,
-        "tag": tag
+        "url": '',
+        "tag": ''
     }
