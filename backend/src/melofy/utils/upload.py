@@ -22,6 +22,7 @@ def validate_img_size(file: UploadFile):
             raise UploadMaxSizeExceedError
         temp.write(chunk)
     
+    temp.close()
     return TemporaryFileType(name=temp.name, file=temp.file)
 
 

@@ -27,9 +27,9 @@ def upload(
 
     #validate file_size
     cover_file = validate_img_size(cover)
-
-    url, _ = CloudinaryServices.upload_image(cover_file)
+    url, tag = CloudinaryServices.upload_image(cover_file)
 
     return {
-        "url": url
+        "url": url,
+        "tag": tag
     }

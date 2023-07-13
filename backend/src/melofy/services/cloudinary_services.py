@@ -11,24 +11,20 @@ from melofy.utils.schemas import TemporaryFileType
 
 class CloudinaryServices:
     @classmethod
-    def upload_image(cls, image: Union[IO, TemporaryFileType]) -> Tuple[HttpUrl, str]:
+    def upload_image(cls, image: TemporaryFileType) -> Tuple[HttpUrl, str]:
         """
         Provide path of the image and public url for the image is returned.
         """
-        img_copy = image
-        if is_temp:=isinstance(image, TemporaryFileType):
-            img_copy = image.file
-
+    
         tag=str(uuid4())
-        response = upload_image(img_copy, tags=tag)
+        response = upload_image(image.file.name, tags=tag)
         url, _ = cloudinary_url(
             response.public_id,
             format=response.format
         )
 
-        if is_temp:
-            image.file.close()
-            os.unlink(image.name)
+        #finally deleting the temporary file.
+        os.unlink(image.file.name)
 
         return HttpUrl(url), tag
     
