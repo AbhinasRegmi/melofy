@@ -14,3 +14,10 @@ class InvalidAccessOrIdTokenError(HTTPException):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid login credentials. Try and login in again."
         )
+
+class UserHasNoMusicError(HTTPException):
+    def __init__(self) -> None:
+        return super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User has uploaded no music."
+        )

@@ -3,22 +3,24 @@ from typing import Optional
 from sqlalchemy.orm import Session
 
 from melofy.models.user_model import Music, User
-
+from melofy.schemas.music_schema import MusicMetaUploadSchema
 
 class MusicServices:
     @classmethod
-    def add_music(cls, db: Session, title: str, cover_url: str, publisher: User) -> Optional[Music]:
+    def add_music(cls, db: Session, user: User, meta: MusicMetaUploadSchema) -> None:
+        """
+        Run this as a background task.
+        """
         db_music = Music(
-            title=title,
-            cover_url=cover_url,
-            publisher_id=publisher.id,
-            published_by=publisher
+            title=meta.title,
+            cover_url=meta.cover_url,
+            music_data=meta.music_data,
+            publisher_id=user.id,
+            published_by=user
         )
 
-        publisher.published_musics.append(db_music)
+        user.published_musics.append(db_music)
         
-        db.add(publisher)
+        db.add(user)
         db.commit()
-        db.refresh(publisher)
-
-        return db_music
+        db.refresh(user)

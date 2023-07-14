@@ -11,7 +11,7 @@ from melofy.utils.schemas import TemporaryFileType
 
 class CloudinaryServices:
     @classmethod
-    def upload_image(cls, image: TemporaryFileType) -> Tuple[HttpUrl, str]:
+    def upload_image(cls, image: TemporaryFileType) -> Tuple[str, str]:
         """
         Provide path of the image and public url for the image is returned.
         """
@@ -24,7 +24,7 @@ class CloudinaryServices:
         )
 
 
-        return HttpUrl(url), tag
+        return url, tag
     
     @classmethod
     def delete_image(cls, image_tag: str) -> None:

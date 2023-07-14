@@ -33,6 +33,7 @@ class Music(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     cover_url: Mapped[str]
+    music_data: Mapped[str]
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
 
     publisher_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
@@ -42,8 +43,6 @@ class Music(Base):
 
     def __repr__(self) -> str:
         return f"Music(title={self.title}, created_at={self.created_at})"
-
-
 
 
 

@@ -5,8 +5,10 @@ from melofy.deps.database import get_db, get_mdb
 from melofy.deps.security import get_current_user
 
 from melofy.schemas.upload_schema import UploadTypeValidation
+from melofy.schemas.music_schema import MusicMetaUploadSchema
 
 from melofy.services.mongo_services import MongoServices
+from melofy.services.music_services import MusicServices
 from melofy.services.cloudinary_services import CloudinaryServices
 
 from melofy.utils.hash import generate_random_hash
@@ -32,14 +34,15 @@ async def upload(
 
     #validate file_size
     with validate_img_size(cover) as cover_file:
-        # url, tag = CloudinaryServices.upload_image(cover_file)
-        pass
+        url, tag = CloudinaryServices.upload_image(cover_file)
 
     with validate_audio_size(music) as music_file:
         music_hash = generate_random_hash()
-        oid = MongoServices.upload_music(mdb, music_file, music_hash)
+        background.add_task(MongoServices.upload_music, mdb, music_file, music_hash)
 
+    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=music_hash)
+    MusicServices.add_music(db, user, music_meta)
+    
     return {
-        "url": oid,
-        "tag": ''
+        "msg": "OK"
     }
