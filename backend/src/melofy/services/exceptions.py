@@ -15,9 +15,9 @@ class InvalidAccessOrIdTokenError(HTTPException):
             detail="Invalid login credentials. Try and login in again."
         )
 
-class UserHasNoMusicError(HTTPException):
+class MusicNotFoundError(HTTPException):
     def __init__(self) -> None:
         return super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User has uploaded no music."
+            detail="No such music found."
         )

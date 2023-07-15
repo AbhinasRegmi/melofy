@@ -1,6 +1,8 @@
-from fastapi import Depends, BackgroundTasks
+from fastapi.responses import StreamingResponse
+from fastapi import Depends, BackgroundTasks, Query
 from fastapi import APIRouter, UploadFile, File, Form
 
+from melofy.deps.security import login_required
 from melofy.deps.database import get_db, get_mdb
 from melofy.deps.security import get_current_user
 
@@ -18,12 +20,12 @@ from melofy.utils.upload import validate_img_size, validate_audio_size
 music_handler = APIRouter()
 
 #testing route
-@music_handler.post("/music")
+@music_handler.post("/upload")
 async def upload(
     background: BackgroundTasks,
-    # db=Depends(get_db),
+    db=Depends(get_db),
     mdb=Depends(get_mdb),
-    # user=Depends(get_current_user),
+    user=Depends(get_current_user),
     title: str = Form(...),
     cover: UploadFile = File(...),
     music: UploadFile = File(...)):
@@ -40,9 +42,23 @@ async def upload(
     with validate_audio_size(music) as music_file:
         background.add_task(MongoServices.upload_music, mdb, music_file, file_hash)
 
-    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=file_hash)
-    # MusicServices.add_music(db, user, music_meta)
+    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, file_hash=file_hash)
+    background.add_task(MusicServices.add_music, db, user, music_meta)
     
     return {
         "msg": "OK"
     }
+
+
+@music_handler.get(
+    "/stream",
+    # dependencies=[Depends(login_required)],
+    response_class=StreamingResponse)
+def stream_music(
+    mdb=Depends(get_mdb),
+    hash: str=Query(...)
+    ):
+    return StreamingResponse(
+        MongoServices.test_stream(mdb, file_hash=hash),
+        media_type="audio/mp3"
+    )

@@ -30,8 +30,8 @@ class UserServices:
         return db.query(User).filter(User.id == user_id).first()
     
     @classmethod
-    def get_all_user_music(cls, db: Session, user_id: int) -> Optional[List[Music]]:
+    def get_all_user_music(cls, db: Session, user_id: int) -> List[Music]:
         if user:=db.query(User).filter(User.id == user_id).first():
             return user.published_musics
         
-        return None
+        return []

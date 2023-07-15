@@ -2,9 +2,9 @@ from typing import Generator, Any
 
 from gridfs import GridFS
 
-from melofy.utils.schemas import TemporaryFileType
 from melofy.schemas.object_id import BaseObjectId
-
+from melofy.utils.schemas import TemporaryFileType
+from melofy.services.exceptions import MusicNotFoundError
 
 class MongoServices:
     @classmethod
@@ -26,7 +26,12 @@ class MongoServices:
         file = mdb.find_one({"filename": file_hash})
 
         if not file:
-            raise
+            raise MusicNotFoundError
 
         for chunk in file.readchunk():
             yield chunk #type:ignore
+
+    @classmethod
+    def test_stream(cls, mdb: GridFS, file_hash: str) -> Generator[bytes, None, None]:
+        with open("./song.MP4", 'rb') as fp:
+            yield from fp

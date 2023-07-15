@@ -7,7 +7,6 @@ from melofy.deps.security import get_current_user
 
 from melofy.services.user_services import UserServices
 from melofy.schemas.music_schema import MusicResponseSchema
-from melofy.services.exceptions import UserHasNoMusicError
 
 
 user_handler = APIRouter()

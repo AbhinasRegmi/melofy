@@ -12,7 +12,7 @@ class MusicResponseSchema(BaseModel):
 
     title: str
     cover_url: str
-    music_data: str
+    file_hash: str
     created_at: datetime
     published_by: UserResponseInsideMusic
 
@@ -21,6 +21,6 @@ class MusicResponseSchema(BaseModel):
 class MusicMetaUploadSchema(BaseModel):
     title: str
     cover_url: str
-    music_data: str
+    file_hash: str
 
     created_at: datetime = Field(default=datetime.now())

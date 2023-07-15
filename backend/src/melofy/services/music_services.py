@@ -14,7 +14,7 @@ class MusicServices:
         db_music = Music(
             title=meta.title,
             cover_url=meta.cover_url,
-            music_data=meta.music_data,
+            file_hash=meta.file_hash,
             publisher_id=user.id,
             published_by=user
         )
