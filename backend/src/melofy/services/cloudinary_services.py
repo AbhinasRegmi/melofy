@@ -1,5 +1,4 @@
 import os
-from uuid import uuid4
 from typing import IO, Tuple, Union
 
 from pydantic import HttpUrl
@@ -11,20 +10,19 @@ from melofy.utils.schemas import TemporaryFileType
 
 class CloudinaryServices:
     @classmethod
-    def upload_image(cls, image: TemporaryFileType) -> Tuple[str, str]:
+    def upload_image(cls, image: TemporaryFileType, file_hash: str) -> str:
         """
         Provide path of the image and public url for the image is returned.
         """
-    
-        tag=str(uuid4())
-        response = upload_image(image.name, tags=tag)
+   
+        response = upload_image(image.name, tags=file_hash)
         url, _ = cloudinary_url(
             response.public_id,
             format=response.format
         )
 
 
-        return url, tag
+        return url
     
     @classmethod
     def delete_image(cls, image_tag: str) -> None:

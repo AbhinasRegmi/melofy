@@ -33,15 +33,15 @@ async def upload(
     UploadTypeValidation.validate_type(music, image=False)
 
     #validate file_size
+    file_hash = generate_random_hash()
     with validate_img_size(cover) as cover_file:
-        url, tag = CloudinaryServices.upload_image(cover_file)
+        url = CloudinaryServices.upload_image(cover_file, file_hash)
 
     with validate_audio_size(music) as music_file:
-        music_hash = generate_random_hash()
-        background.add_task(MongoServices.upload_music, mdb, music_file, music_hash)
+        background.add_task(MongoServices.upload_music, mdb, music_file, file_hash)
 
-    #music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=music_hash)
-    #MusicServices.add_music(db, user, music_meta)
+    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=file_hash)
+    # MusicServices.add_music(db, user, music_meta)
     
     return {
         "msg": "OK"
