@@ -2,7 +2,7 @@ from typing import Any, Callable
 
 from bson import ObjectId
 from pydantic_core import core_schema
-from pydantic import BaseModel, field_serializer
+from pydantic import BaseModel, field_serializer, ConfigDict
 
 
 class PyObjectId(ObjectId):
@@ -36,7 +36,8 @@ class BaseObjectId(BaseModel):
     def serialize_mongo_id(self, mongo_id: PyObjectId, _info) -> str:
         return str(mongo_id)
 
-    # class Config:
-    #     populate_by_name=True
-    #     arbitarty_types_allowed=True
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        populate_by_name=True
+    )
 
