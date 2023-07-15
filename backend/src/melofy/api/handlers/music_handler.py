@@ -21,9 +21,9 @@ music_handler = APIRouter()
 @music_handler.post("/music")
 async def upload(
     background: BackgroundTasks,
-    db=Depends(get_db),
+    # db=Depends(get_db),
     mdb=Depends(get_mdb),
-    user=Depends(get_current_user),
+    # user=Depends(get_current_user),
     title: str = Form(...),
     cover: UploadFile = File(...),
     music: UploadFile = File(...)):
@@ -40,8 +40,8 @@ async def upload(
         music_hash = generate_random_hash()
         background.add_task(MongoServices.upload_music, mdb, music_file, music_hash)
 
-    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=music_hash)
-    MusicServices.add_music(db, user, music_meta)
+    #music_meta = MusicMetaUploadSchema(title=title, cover_url=url, music_data=music_hash)
+    #MusicServices.add_music(db, user, music_meta)
     
     return {
         "msg": "OK"
