@@ -1,4 +1,4 @@
-from typing import Generator, Any
+from typing import AsyncGenerator, Any, Generator
 
 import aiofiles
 from gridfs import GridFS
@@ -30,9 +30,10 @@ class MongoServices:
             raise MusicNotFoundError
 
         for chunk in file.readchunk():
-            yield chunk
+            yield chunk #type:ignore
 
     @classmethod
-    async def test_stream(cls, mdb: GridFS, file_hash: str) -> Generator[bytes, None, None]:
+    async def test_stream(cls, mdb: GridFS, file_hash: str) -> AsyncGenerator[bytes, None]:
         async with aiofiles.open("./song.MP4", mode='rb') as handler:
-            yield from handler
+            while chunk:= await handler.read(1024  * 5):
+                yield chunk
