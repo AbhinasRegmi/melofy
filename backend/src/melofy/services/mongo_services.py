@@ -1,5 +1,6 @@
 from typing import Generator, Any
 
+import aiofiles
 from gridfs import GridFS
 
 from melofy.schemas.object_id import BaseObjectId
@@ -29,9 +30,9 @@ class MongoServices:
             raise MusicNotFoundError
 
         for chunk in file.readchunk():
-            yield chunk #type:ignore
+            yield chunk
 
     @classmethod
-    def test_stream(cls, mdb: GridFS, file_hash: str) -> Generator[bytes, None, None]:
-        with open("./song.MP4", 'rb') as fp:
-            yield from fp
+    async def test_stream(cls, mdb: GridFS, file_hash: str) -> Generator[bytes, None, None]:
+        async with aiofiles.open("./song.MP4", mode='rb') as handler:
+            yield from handler
