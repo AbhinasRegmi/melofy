@@ -1,8 +1,8 @@
-from typing import AsyncGenerator, Any, Generator
+from typing import Tuple, Generator
 
-import aiofiles
 from gridfs import GridFS
 
+from melofy.core.config import settings
 from melofy.schemas.object_id import BaseObjectId
 from melofy.utils.schemas import TemporaryFileType
 from melofy.services.exceptions import MusicNotFoundError
@@ -23,17 +23,20 @@ class MongoServices:
             return BaseObjectId(mongo_id=mongo_id)
 
     @classmethod
-    def stream_music(cls, mdb: GridFS, file_hash: str) -> Generator[bytes, None, None]:
+    def stream_music(cls, mdb: GridFS, file_hash: str) -> Tuple[str, Generator[bytes, None, None]]:
+        """
+        Returns the content-type of the stream, and stream function to consume.
+        """
+        #todo: streaming controls.
         file = mdb.find_one({"filename": file_hash})
 
         if not file:
             raise MusicNotFoundError
+        
+        content_type: str = file.content_type #type:ignore content_type is uploaded during file upload
 
-        for chunk in file.readchunk():
-            yield chunk #type:ignore
-
-    @classmethod
-    async def test_stream(cls, mdb: GridFS, file_hash: str) -> AsyncGenerator[bytes, None]:
-        async with aiofiles.open("./song.MP4", mode='rb') as handler:
-            while chunk:= await handler.read(1024  * 5):
+        def streamer() -> Generator[bytes, None, None]:
+            while chunk:=file.read(settings.MELOFY_STREAMING_SIZE):
                 yield chunk
+
+        return content_type, streamer()

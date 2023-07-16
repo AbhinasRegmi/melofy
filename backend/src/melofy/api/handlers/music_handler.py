@@ -54,11 +54,14 @@ async def upload(
     "/stream",
     # dependencies=[Depends(login_required)],
     response_class=StreamingResponse)
-async def stream_music(
+def stream_music(
     mdb=Depends(get_mdb),
     hash: str=Query(...)
     ):
+
+    content_type, streamer = MongoServices.stream_music(mdb, file_hash=hash)
+
     return StreamingResponse(
-        MongoServices.test_stream(mdb, file_hash=hash),
-        media_type="video/mp4"
+        streamer,
+        media_type=content_type
     )

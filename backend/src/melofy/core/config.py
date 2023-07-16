@@ -24,6 +24,9 @@ class _Setting(BaseSettings):
         "http://localhost:8000"
     ]
 
+    #streaming
+    MELOFY_STREAMING_SIZE: int = 10 * 1024 # 10kB
+
     #uploads
     MELOFY_COVER_UPLOAD_MAXSIZE: int = 5 * 1024 * 1024 # 5MB
     MELOFY_AUDIO_UPLOAD_MAXSIZE: int = 20 * 1024 * 1024 # 20MB
