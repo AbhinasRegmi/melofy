@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi.responses import StreamingResponse
 from fastapi import Depends, BackgroundTasks, Query
 from fastapi import APIRouter, UploadFile, File, Form
@@ -7,7 +9,7 @@ from melofy.deps.database import get_db, get_mdb
 from melofy.deps.security import get_current_user
 
 from melofy.schemas.upload_schema import UploadTypeValidation
-from melofy.schemas.music_schema import MusicMetaUploadSchema
+from melofy.schemas.music_schema import MusicMetaUploadSchema, MusicTags, MusicResponseSchema
 
 from melofy.services.mongo_services import MongoServices
 from melofy.services.music_services import MusicServices
@@ -19,7 +21,7 @@ from melofy.utils.upload import validate_img_size, validate_audio_size
 
 music_handler = APIRouter()
 
-#testing route
+
 @music_handler.post("/upload")
 async def upload(
     background: BackgroundTasks,
@@ -27,6 +29,7 @@ async def upload(
     mdb=Depends(get_mdb),
     user=Depends(get_current_user),
     title: str = Form(...),
+    tags: List[MusicTags] = Form(...),
     cover: UploadFile = File(...),
     music: UploadFile = File(...)):
 
@@ -42,8 +45,8 @@ async def upload(
     with validate_audio_size(music) as music_file:
         background.add_task(MongoServices.upload_music, mdb, music_file, file_hash)
 
-    music_meta = MusicMetaUploadSchema(title=title, cover_url=url, file_hash=file_hash)
-    background.add_task(MusicServices.add_music, db, user, music_meta)
+    upload_meta = MusicMetaUploadSchema(title=title, tags=tags, cover_url=url, file_hash=file_hash)
+    background.add_task(MusicServices.add_music, db, user, upload_meta)
     
     return {
         "msg": "OK"
@@ -52,7 +55,7 @@ async def upload(
 
 @music_handler.get(
     "/stream",
-    # dependencies=[Depends(login_required)],
+    dependencies=[Depends(login_required)],
     response_class=StreamingResponse)
 def stream_music(
     mdb=Depends(get_mdb),
@@ -65,3 +68,12 @@ def stream_music(
         streamer,
         media_type=content_type
     )
+
+@music_handler.get(
+        "/tag",
+        response_model=List[MusicResponseSchema],
+        dependencies=[Depends(login_required)])
+def get_music_by_tag(
+    db = Depends(get_db),
+    tag: MusicTags = Query(...)):
+    return MusicServices.get_music_by_tag(db, tag)

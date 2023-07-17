@@ -4,6 +4,7 @@ from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from melofy.models.user_model import User, Music
+from melofy.deps.exceptions import UserNotFoundError
 from melofy.schemas.user_schema import UserCreateSchema
 
 class UserServices:
@@ -34,4 +35,4 @@ class UserServices:
         if user:=db.query(User).filter(User.id == user_id).first():
             return user.published_musics
         
-        return []
+        raise UserNotFoundError

@@ -1,6 +1,8 @@
 from typing import List
 from datetime import datetime
 
+from sqlalchemy import Table
+from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 
 from sqlalchemy.orm import Mapped
@@ -9,6 +11,33 @@ from sqlalchemy.orm import relationship, mapped_column
 
 from melofy.models.base_model import Base
 from melofy.core.connection import engine
+
+
+
+music_tags_association = Table(
+    "music_tags_association",
+    Base.metadata,
+    Column("music_data_id", ForeignKey("music_data.id"), primary_key=True),
+    Column("tags_id", ForeignKey("tags.id"), primary_key=True)
+)
+
+
+class Tags(Base):
+    __tablename__ = "tags"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(unique=True)
+
+    music: Mapped[List['Music']] = relationship(
+        secondary=music_tags_association,
+        back_populates='tags'
+    )
+
+
+    def __repr__(self) -> str:
+        return f"Tags(title={self.title})"
+
+
 
 
 class User(Base):
@@ -34,6 +63,10 @@ class Music(Base):
     title: Mapped[str]
     cover_url: Mapped[str]
     file_hash: Mapped[str]
+    tags: Mapped[List[Tags]] = relationship(
+        secondary=music_tags_association,
+        back_populates="music"
+    )
     created_at: Mapped[datetime] = mapped_column(default=datetime.now())
 
     publisher_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
