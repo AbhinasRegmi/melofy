@@ -38,3 +38,9 @@ class MusicServices:
         return db.query(Music).filter(
             Music.tags.any(Tags.title == tag.value)
         ).all()
+    
+    @classmethod
+    def get_music_by_title(cls, db: Session, title: str) -> List[Music]:
+        ...
+
+    

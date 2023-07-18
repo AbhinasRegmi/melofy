@@ -22,3 +22,10 @@ class UploadMaxSizeExceedError(HTTPException):
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
             detail="Uploaded file exceeded max limit."
         )
+
+class Mp4AudioNotFoundError(HTTPException):
+    def __init__(self) -> None:
+        return super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The mp4 audio for the url not found."
+        )
